@@ -1,0 +1,13 @@
+{
+  "name": "druidvav/badapush-client",
+  "license": "MIT",
+  "description": "",
+  "autoload": {
+    "psr-4": { "": "src/" }
+  },
+  "require": {
+    "php": ">=7.1.0",
+    "ext-curl": "*",
+    "ext-json": "*"
+  }
+}
