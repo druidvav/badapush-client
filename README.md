@@ -102,29 +102,25 @@ do {
         switch ($response['result']) {
             case 'invalid_job':
                 // Обзвонщик нажал кнопку, что задачу невозможно выполнить
-	            	break;
+                break;
             case 'invalid_device_id':
                 // Обзвонщик нажал кнопку, что мобильный телефон неправильный
-	            	break;
+                break;
             case 'cancel':
                 // Задача была отменена по API
-	            	break;
+                break;
             case 'delay':
                 // Звонок отложен обзвонщиком (недозвон, либо просьба перезвонить)
-	            	break;
+                break;
             case 'ok':
             case 'received': // Или любой из вариантов переданных в setDataFields 
                 // Обзвонщик выполнил задачу, выбрав один из вариантов
-	            	break;
+                break;
             default: throw new Exception('Unknown code: ' . $response['result']);
         }
     }
-} while (sizeof($results) > 0);
+} while (sizeof($results) > 0); // Выполняем пока не обработаем все результаты
 ```
-
-
-
-
 
 ## Настройка сервисов в badapush
 
