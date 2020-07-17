@@ -64,7 +64,7 @@ $payload->setPayloadAps([
     'sound' => 'default',
     'content-available' => 1,
     'priority' => 5,
-  	'badge' => 3,
+    'badge' => 3,
 ]); // Только для APNS, информация из объекта aps.
 $this->get('queue_client')->sendPayload($payload);
 ```
@@ -80,7 +80,7 @@ do {
     foreach ($list as $row) {
         $fromId = $row->getId();
         if ($row->isInvalidId()) {
-        	  // Обрабатываем ошибку идентификатора устройства.
+            // Обрабатываем ошибку идентификатора устройства.
             // Сам идентификатор можно получить так:
             // $row->getDeviceId()
         }
