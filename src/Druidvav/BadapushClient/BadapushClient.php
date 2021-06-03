@@ -115,7 +115,7 @@ class BadapushClient
             throw new ClientException($data['error']['code'] . ': ' . $data['error']['message']);
         } elseif ($httpcode == 502) {
             throw new InternalErrorException('Service is temporary shut down');
-        } elseif ($httpcode == 504) {
+        } elseif ($httpcode == 500 || $httpcode == 504) {
             throw new InternalErrorException('Service is temporary down');
         } elseif ($errno == 28) {
             throw new InternalErrorException('TIMEOUT ' . $error);
