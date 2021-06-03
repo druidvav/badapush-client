@@ -18,7 +18,7 @@ class BadapushClient
     {
         $this->apiKey = $apiKey;
         if (!$apiUrl) {
-            $this->apiUrl = 'http://badapush.ru/api/v2/jsonrpc';
+            $this->apiUrl = 'https://badapush.ru/api/v2/jsonrpc';
         } else {
             $this->apiUrl = $apiUrl;
         }
