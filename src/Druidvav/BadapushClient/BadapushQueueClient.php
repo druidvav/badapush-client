@@ -36,11 +36,9 @@ class BadapushQueueClient extends BadapushClient
                 'external_id' => $payload->getExternalId()
             ];
         }
-        $result = $this->request([
-            'id' => 1,
-            'method' => 'payload.enqueueBatch',
-            'params' => [ $batch ]
-        ]);
+        if (!empty($batch)) {
+            $this->request([ 'id' => 1, 'method' => 'payload.enqueueBatch', 'params' => [ $batch ] ]);
+        }
         $this->batchMode = false;
         $this->batch = [ ];
     }
