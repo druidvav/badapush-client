@@ -91,6 +91,7 @@ class BadapushClient
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
             'X-Authorization-Token: ' . $this->apiKey,
             'Content-Type: application/json',
+            'Expect: '
         ]);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $responseData = curl_exec($ch);
