@@ -4,6 +4,7 @@ namespace Druidvav\BadapushClient;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\RequestException;
 use Druidvav\BadapushClient\Entity\Message;
 use Druidvav\BadapushClient\Payload\PayloadInterface;
 use Druidvav\BadapushClient\Exception\ClientException;
@@ -95,10 +96,21 @@ class BadapushClient
                 'connect_timeout' => 5,
                 'http_errors' => false,
             ]);
+        } catch (RequestException $e) {
+            if ($e->hasResponse()) {
+                $response = $e->getResponse();
+            } else {
+                throw new InternalErrorException($e->getMessage(), 0, $e);
+            }
         } catch (GuzzleException $e) {
             throw new InternalErrorException($e->getMessage(), 0, $e);
         }
 
+        return $this->parseResponse($response);
+    }
+
+    protected function parseResponse($response)
+    {
         $httpcode = $response->getStatusCode();
         $responseData = (string) $response->getBody();
         $data = json_decode($responseData, true);
