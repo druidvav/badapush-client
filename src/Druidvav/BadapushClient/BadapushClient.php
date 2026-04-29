@@ -97,10 +97,13 @@ class BadapushClient
             ]);
         } catch (RequestException $e) {
             if ($e->hasResponse()) {
-                $response = $e->getResponse();
-            } else {
-                throw new InternalErrorException($e->getMessage(), 0, $e);
+                $httpcode = $e->getResponse()->getStatusCode();
+                if ($httpcode == 502) {
+                    throw new InternalErrorException('Service is temporary shut down', 0, $e);
+                }
+                throw new InternalErrorException('Service is temporary down', 0, $e);
             }
+            throw new InternalErrorException($e->getMessage(), 0, $e);
         }
 
         return $this->parseResponse($response);
@@ -108,7 +111,6 @@ class BadapushClient
 
     protected function parseResponse(ResponseInterface $response): array
     {
-        $httpcode = $response->getStatusCode();
         $responseData = (string) $response->getBody();
         $data = json_decode($responseData, true);
 
@@ -125,11 +127,7 @@ class BadapushClient
             }
         } elseif (!empty($data['error'])) {
             throw new ClientException($data['error']['code'] . ': ' . $data['error']['message']);
-        } elseif ($httpcode == 502) {
-            throw new InternalErrorException('Service is temporary shut down');
-        } elseif ($httpcode == 500 || $httpcode == 504) {
-            throw new InternalErrorException('Service is temporary down');
         }
-        throw new ClientException($httpcode . ': ' . $responseData);
+        throw new ClientException($response->getStatusCode() . ': ' . $responseData);
     }
 }
