@@ -97,10 +97,6 @@ class BadapushClient
             ]);
         } catch (RequestException $e) {
             if ($e->hasResponse()) {
-                $httpcode = $e->getResponse()->getStatusCode();
-                if ($httpcode == 502) {
-                    throw new InternalErrorException('Service is temporary shut down', 0, $e);
-                }
                 throw new InternalErrorException('Service is temporary down', 0, $e);
             }
             throw new InternalErrorException($e->getMessage(), 0, $e);
