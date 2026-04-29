@@ -8,12 +8,12 @@ class Payload implements PayloadInterface
     protected $isDevelopment;
     protected $externalId;
 
-    public static function create($deviceId = '', $payload = [ ]): Payload
+    public static function create(string $deviceId = '', array $payload = []): Payload
     {
         return new Payload($deviceId, $payload);
     }
 
-    public function __construct($deviceId = '', $payload = [ ], $isDevelopment = false)
+    public function __construct(string $deviceId = '', array $payload = [], bool $isDevelopment = false)
     {
         $this->deviceId = $deviceId;
         $this->payload = $payload;
@@ -25,13 +25,13 @@ class Payload implements PayloadInterface
         return $this->isDevelopment;
     }
 
-    public function setIsDevelopment($isDevelopment): Payload
+    public function setIsDevelopment(bool $isDevelopment): Payload
     {
         $this->isDevelopment = $isDevelopment;
         return $this;
     }
 
-    public function getPayload()
+    public function getPayload(): array
     {
         return $this->payload;
     }

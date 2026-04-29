@@ -13,12 +13,12 @@ class CallerPayload implements PayloadInterface
         'ok' => 'OK!',
     ];
 
-    public static function create($phoneNumber): CallerPayload
+    public static function create(string $phoneNumber): CallerPayload
     {
         return new CallerPayload($phoneNumber);
     }
 
-    public function __construct($phoneNumber)
+    public function __construct(string $phoneNumber)
     {
         $this->phoneNumber = $phoneNumber;
     }
@@ -28,7 +28,7 @@ class CallerPayload implements PayloadInterface
         return false;
     }
 
-    public function getPayload()
+    public function getPayload(): array
     {
         return [
             'job_group' => $this->group,

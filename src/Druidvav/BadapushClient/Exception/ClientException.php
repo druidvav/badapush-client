@@ -9,7 +9,7 @@ class ClientException extends Exception
 
     protected $type = self::TYPE;
 
-    public function getErrorType()
+    public function getErrorType(): string
     {
         return $this->type;
     }

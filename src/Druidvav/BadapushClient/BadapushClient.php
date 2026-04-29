@@ -4,6 +4,7 @@ namespace Druidvav\BadapushClient;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
+use Psr\Http\Message\ResponseInterface;
 use Druidvav\BadapushClient\Entity\Message;
 use Druidvav\BadapushClient\Payload\PayloadInterface;
 use Druidvav\BadapushClient\Exception\ClientException;
@@ -18,7 +19,7 @@ class BadapushClient
     protected $apiKey;
     protected $httpClient;
 
-    public function __construct($apiKey, $apiUrl = null, ClientInterface $httpClient = null)
+    public function __construct(string $apiKey, ?string $apiUrl = null, ClientInterface $httpClient = null)
     {
         $this->apiKey = $apiKey;
         $this->apiUrl = $apiUrl ?: 'https://badapush.ru/api/v2/jsonrpc';
@@ -74,7 +75,7 @@ class BadapushClient
      * @throws ClientException
      * @throws InternalErrorException
      */
-    public function cancelCallsByExternalId($externalId, $reason = '')
+    public function cancelCallsByExternalId(string $externalId, string $reason = ''): void
     {
         $this->request([
             'id' => 1,
@@ -83,7 +84,7 @@ class BadapushClient
         ]);
     }
 
-    protected function request($query)
+    protected function request(array $query): array
     {
         try {
             $response = $this->httpClient->post($this->apiUrl, [
@@ -102,7 +103,7 @@ class BadapushClient
         return $this->parseResponse($response);
     }
 
-    protected function parseResponse($response)
+    protected function parseResponse(ResponseInterface $response): array
     {
         $httpcode = $response->getStatusCode();
         $responseData = (string) $response->getBody();
