@@ -1,6 +1,9 @@
 <?php
 namespace Druidvav\BadapushClient;
 
+use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\ConnectException;
 use Druidvav\BadapushClient\Entity\Message;
 use Druidvav\BadapushClient\Payload\PayloadInterface;
 use Druidvav\BadapushClient\Exception\ClientException;
@@ -13,15 +16,13 @@ class BadapushClient
     protected $apiUrl;
     protected $method = 'payload.send';
     protected $apiKey;
+    protected $httpClient;
 
-    public function __construct($apiKey, $apiUrl = null)
+    public function __construct($apiKey, $apiUrl = null, ClientInterface $httpClient = null)
     {
         $this->apiKey = $apiKey;
-        if (!$apiUrl) {
-            $this->apiUrl = 'https://badapush.ru/api/v2/jsonrpc';
-        } else {
-            $this->apiUrl = $apiUrl;
-        }
+        $this->apiUrl = $apiUrl ?: 'https://badapush.ru/api/v2/jsonrpc';
+        $this->httpClient = $httpClient ?: new Client();
     }
 
     /**
@@ -84,23 +85,24 @@ class BadapushClient
 
     protected function request($query)
     {
-        $ch = curl_init($this->apiUrl);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 15);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($query));
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'X-Authorization-Token: ' . $this->apiKey,
-            'Content-Type: application/json',
-            'Expect: '
-        ]);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $responseData = curl_exec($ch);
-        $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        $errno = curl_errno($ch);
-        $error = curl_error($ch);
-        curl_close($ch);
+        try {
+            $response = $this->httpClient->post($this->apiUrl, [
+                'json' => $query,
+                'headers' => [
+                    'X-Authorization-Token' => $this->apiKey,
+                ],
+                'timeout' => 15,
+                'connect_timeout' => 5,
+                'http_errors' => false,
+            ]);
+        } catch (ConnectException $e) {
+            throw new InternalErrorException('TIMEOUT ' . $e->getMessage());
+        }
 
+        $httpcode = $response->getStatusCode();
+        $responseData = (string) $response->getBody();
         $data = json_decode($responseData, true);
+
         if (!empty($data['result']['result'])) {
             if ($data['result']['result'] == 'ok') {
                 return $data['result'];
@@ -118,9 +120,7 @@ class BadapushClient
             throw new InternalErrorException('Service is temporary shut down');
         } elseif ($httpcode == 500 || $httpcode == 504) {
             throw new InternalErrorException('Service is temporary down');
-        } elseif ($errno == 28) {
-            throw new InternalErrorException('TIMEOUT ' . $error);
         }
-        throw new ClientException($httpcode . '/' . $errno . ': ' . ($error ?: $responseData));
+        throw new ClientException($httpcode . ': ' . $responseData);
     }
 }
