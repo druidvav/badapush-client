@@ -28,7 +28,7 @@ class CallerPayload implements PayloadInterface
         return false;
     }
 
-    public function getPayload(): array
+    public function getPayload()
     {
         return [
             'job_group' => $this->group,
