@@ -96,11 +96,7 @@ class BadapushClient
                 'http_errors' => false,
             ]);
         } catch (RequestException $e) {
-            if ($e->hasResponse()) {
-                $response = $e->getResponse();
-            } else {
-                throw new InternalErrorException($e->getMessage(), 0, $e);
-            }
+            throw new InternalErrorException($e->getMessage(), 0, $e);
         }
 
         return $this->parseResponse($response);
