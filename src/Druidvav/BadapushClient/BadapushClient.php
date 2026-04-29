@@ -94,10 +94,13 @@ class BadapushClient
                 ],
                 'timeout' => 15,
                 'connect_timeout' => 5,
-                'http_errors' => false,
             ]);
         } catch (RequestException $e) {
-            throw new InternalErrorException($e->getMessage(), 0, $e);
+            if ($e->hasResponse()) {
+                $response = $e->getResponse();
+            } else {
+                throw new InternalErrorException($e->getMessage(), 0, $e);
+            }
         }
 
         return $this->parseResponse($response);
