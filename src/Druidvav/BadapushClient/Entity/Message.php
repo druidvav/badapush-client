@@ -66,7 +66,8 @@ class Message
         return $this->type == InvalidSubscribeIdException::TYPE;
     }
 
-    public function getResponse(): ?string
+    /** @return string|array|null */
+    public function getResponse()
     {
         return $this->response;
     }
