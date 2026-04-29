@@ -3,7 +3,6 @@ namespace Druidvav\BadapushClient;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
 use Druidvav\BadapushClient\Entity\Message;
 use Druidvav\BadapushClient\Payload\PayloadInterface;
@@ -102,8 +101,6 @@ class BadapushClient
             } else {
                 throw new InternalErrorException($e->getMessage(), 0, $e);
             }
-        } catch (GuzzleException $e) {
-            throw new InternalErrorException($e->getMessage(), 0, $e);
         }
 
         return $this->parseResponse($response);
