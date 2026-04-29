@@ -8,12 +8,14 @@ class Payload implements PayloadInterface
     protected $isDevelopment;
     protected $externalId;
 
-    public static function create(string $deviceId = '', array $payload = []): Payload
+    /** @param mixed $payload */
+    public static function create(string $deviceId = '', $payload = []): Payload
     {
         return new Payload($deviceId, $payload);
     }
 
-    public function __construct(string $deviceId = '', array $payload = [], bool $isDevelopment = false)
+    /** @param mixed $payload */
+    public function __construct(string $deviceId = '', $payload = [], bool $isDevelopment = false)
     {
         $this->deviceId = $deviceId;
         $this->payload = $payload;

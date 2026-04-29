@@ -45,7 +45,8 @@ class Message
         return $this->externalId;
     }
 
-    public function getPayload(): array
+    /** @return mixed */
+    public function getPayload()
     {
         return $this->payload;
     }
