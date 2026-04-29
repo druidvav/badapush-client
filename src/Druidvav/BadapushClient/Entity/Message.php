@@ -15,7 +15,7 @@ class Message
     protected $sentVia;
     protected $requestTime;
 
-    public function __construct($array)
+    public function __construct(array $array)
     {
         $this->id = $array['id'];
         $this->deviceId = $array['recipient_id'];
@@ -30,79 +30,53 @@ class Message
     /**
      * @return integer
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
-    public function getDeviceId()
+    public function getDeviceId(): string
     {
         return $this->deviceId;
     }
 
-    /**
-     * @return string
-     */
-    public function getExternalId()
+    public function getExternalId(): ?string
     {
         return $this->externalId;
     }
 
-    /**
-     * @return array
-     */
+    /** @return mixed */
     public function getPayload()
     {
         return $this->payload;
     }
 
-    /**
-     * @return string
-     */
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }
 
-    /**
-     * @return bool
-     */
-    public function isMessage()
+    public function isMessage(): bool
     {
         return $this->type == 'message';
     }
 
-    /**
-     * @return bool
-     */
-    public function isInvalidId()
+    public function isInvalidId(): bool
     {
         return $this->type == InvalidSubscribeIdException::TYPE;
     }
 
-    /**
-     * @return array
-     */
-    public function getResponse()
+    public function getResponse(): ?string
     {
         return $this->response;
     }
 
-    /**
-     * @return string
-     */
-    public function getSentVia()
+    public function getSentVia(): ?string
     {
         return $this->sentVia;
     }
 
-    /**
-     * @return \DateTime
-     */
-    public function getRequestTime()
+    public function getRequestTime(): \DateTime
     {
         return $this->requestTime;
     }
