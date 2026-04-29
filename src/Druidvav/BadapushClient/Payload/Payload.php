@@ -31,17 +31,20 @@ class Payload implements PayloadInterface
         return $this;
     }
 
+    /** @return mixed */
     public function getPayload()
     {
         return $this->payload;
     }
 
+    /** @param mixed $data */
     public function setPayload($data): Payload
     {
         $this->payload = $data;
         return $this;
     }
 
+    /** @param mixed $data */
     public function setPayloadAps($data): Payload
     {
         $this->payload['aps'] = $data;

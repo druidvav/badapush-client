@@ -28,6 +28,7 @@ class CallerPayload implements PayloadInterface
         return false;
     }
 
+    /** @return mixed */
     public function getPayload()
     {
         return [
