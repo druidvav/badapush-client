@@ -3,6 +3,7 @@ namespace Druidvav\BadapushClient;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
 use Psr\Http\Message\ResponseInterface;
 use Druidvav\BadapushClient\Entity\Message;
@@ -95,6 +96,8 @@ class BadapushClient
                 'timeout' => 15,
                 'connect_timeout' => 5,
             ]);
+        } catch (ConnectException $e) {
+            throw new InternalErrorException('Service is temporary down', 0, $e);
         } catch (RequestException $e) {
             if ($e->hasResponse()) {
                 throw new InternalErrorException('Service is temporary down', 0, $e);
